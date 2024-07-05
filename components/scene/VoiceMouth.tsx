@@ -14,7 +14,7 @@ const VoiceMouth = () => {
         let analyser: AnalyserNode | null = null;
         let microphone: MediaStreamAudioSourceNode | null = null;
         let dataArray: Uint8Array | null = null;
-        const threshold = 0; // 임계값 설정
+        const threshold = 30; // 임계값 설정
 
         navigator.mediaDevices
             .getUserMedia({ audio: true })
@@ -30,11 +30,15 @@ const VoiceMouth = () => {
                     if (!analyser || !dataArray) return;
 
                     analyser.getByteFrequencyData(dataArray);
-
-                    const isSpeakingNow = dataArray.some((value) => value * 100 > threshold);
+                    const average =
+                        dataArray.reduce((sum, value) => sum + value, 0) / dataArray.length;
+                    // const isSpeakingNow = dataArray.some((value) => value * 10000 > threshold);
+                    const isSpeakingNow = average > threshold;
 
                     if (isSpeakingNow) {
-                        setCurrentImageIndex((prevIndex) => (prevIndex === 1 ? 2 : 1)); // 말할 때와 말하지 않을 때 이미지 변경
+                        setCurrentImageIndex((prevIndex) => {
+                            return prevIndex === 1 ? 2 : 1;
+                        }); // 말할 때와 말하지 않을 때 이미지 변경
                     } else {
                         setCurrentImageIndex(0); // 말하지 않을 때는 "/black.png" 표시
                     }
@@ -58,7 +62,6 @@ const VoiceMouth = () => {
             }
         };
     }, []);
-
     return (
         <div className="w-72 h-72 relative">
             <div className="absolute w-full h-full">
