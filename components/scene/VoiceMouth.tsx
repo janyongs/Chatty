@@ -2,12 +2,9 @@
 import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 
-const mouthImages = ['/black.png', '/closeMouse.png', '/openMouse.png'];
-
 const VoiceMouth = () => {
     const mouthRef = useRef<HTMLImageElement>(null);
     const [isSpeaking, setIsSpeaking] = useState(false);
-    const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
     useEffect(() => {
         let audioContext: AudioContext | null = null;
@@ -31,13 +28,7 @@ const VoiceMouth = () => {
 
                     analyser.getByteFrequencyData(dataArray);
 
-                    const isSpeakingNow = dataArray.some((value) => value * 100 > threshold);
-
-                    if (isSpeakingNow) {
-                        setCurrentImageIndex((prevIndex) => (prevIndex === 1 ? 2 : 1)); // 말할 때와 말하지 않을 때 이미지 변경
-                    } else {
-                        setCurrentImageIndex(0); // 말하지 않을 때는 "/black.png" 표시
-                    }
+                    setIsSpeaking(dataArray.some((value) => value * 100 > threshold));
 
                     requestAnimationFrame(updateMouth);
                 };
@@ -61,14 +52,16 @@ const VoiceMouth = () => {
 
     return (
         <div className="w-72 h-72 relative">
-            <div className="absolute w-full h-full">
+            <div className={`absolute w-full h-full ${!isSpeaking ? 'brightness-50' : ''}`}>
+                <Image src="/images/hair1.png" alt="헤어" fill className="z-10" />
                 <Image
                     ref={mouthRef}
-                    src={mouthImages[currentImageIndex]}
+                    src="/images/base.png"
                     alt="캐릭터"
                     layout="fill"
                     objectFit="cover"
                 />
+                {isSpeaking && <Image src="/images/base_face.gif" alt="베이스얼굴" fill />}
             </div>
         </div>
     );

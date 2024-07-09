@@ -38,10 +38,10 @@ const Input = ({
     }
 
     return (
-        <div>
+        <div className="w-full">
             {label ? (
                 <div className="mb-[7px] mt-[17px] ">
-                    <label className="font-semi-bold text-[#888] text-[14px]" htmlFor={id}>
+                    <label className="font-semi-bold text-slate-800 text-[14px]" htmlFor={id}>
                         {label}
                     </label>
                 </div>
