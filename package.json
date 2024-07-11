@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@hookform/error-message": "^2.0.1",
     "@react-spring/three": "^9.7.3",
     "@react-three/drei": "^9.108.1",
     "@react-three/fiber": "^8.16.8",
@@ -16,6 +17,8 @@
     "next": "14.2.4",
     "react": "^18",
     "react-dom": "^18",
+    "react-hook-form": "^7.52.1",
+    "react-toastify": "^10.0.5",
     "three": "^0.166.1"
   },
   "devDependencies": {
